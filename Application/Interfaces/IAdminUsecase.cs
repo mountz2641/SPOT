@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Application.Interfaces
 {
-    public class Vehicle
+    public interface IAdminUsecase
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
+        Task<String> Login();
+        Task<Boolean> Logout();
     }
 }

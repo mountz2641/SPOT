@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    class Status
+    public class Status
     {
-        public string Name { get; set; }
-        public string Value { get; set; }
+        public long Time { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public List<Sensor> Sensors { get; set; }
     }
 }
