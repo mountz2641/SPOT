@@ -15,11 +15,12 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 using Application.Interfaces.Usecases;
 using Application.Interfaces.DAO;
+using Application.Interfaces.Services;
 using Application.Usecases;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.DAO;
-using Shared.Interfaces;
-using Shared;
+using Infrastructure.Services;
+
 
 namespace Web
 {
@@ -45,7 +46,10 @@ namespace Web
 
             services.AddScoped<IVehicleUsecase, VehicleUsecase>();
             services.AddScoped<IVehicleDao, VehicleDao>();
-            services.AddSingleton<IDatetimeService, DateTimeService>();
+            services.AddScoped<IStatusDao, StatusDao>();
+            services.AddSingleton<IDateTimeService, DateTimeService>();
+            services.AddSingleton<IVehicleCodeGenerator, VehicleCodeGenerator>();
+            services.AddSingleton<ISecureRandomizer, RngSecureRandomizer>();
 
             services.AddControllers();
         }

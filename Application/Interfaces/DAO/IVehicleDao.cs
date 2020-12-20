@@ -10,6 +10,7 @@ namespace Application.Interfaces.DAO
 {
     public interface IVehicleDao
     {
-        Task<string> Register(Vehicle vehicle, string code);
+        Task<int> CreateAsync(Vehicle vehicle);
+        Task<Vehicle> FindByCode(string code);
     }
 }

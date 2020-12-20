@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Interfaces
+namespace Application.Interfaces.Services
 {
-    public interface IDatetimeService
+    public interface ISecureRandomizer
     {
-        public DateTime FromISO(string s);
+        public Task<byte[]> GetSizeAsync(int size);
     }
 }

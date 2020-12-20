@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Domain.Entities;
 using Application.Interfaces.Usecases;
-using WebApi.Models;
+using Application.Interfaces.Services;
+using Application.DTO;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,9 +16,9 @@ namespace WebApi.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleUsecase _vehicleUsecase;
-        private readonly IDatetimeService _datetimeService;
+        private readonly IDateTimeService _datetimeService;
 
-        public VehicleController(IVehicleUsecase vehicleUsecase, IDatetimeService datetimeService)
+        public VehicleController(IVehicleUsecase vehicleUsecase, IDateTimeService datetimeService)
         {
             _vehicleUsecase = vehicleUsecase;
             _datetimeService = datetimeService;
@@ -41,12 +40,13 @@ namespace WebApi.Controllers
 
         // GET api/<CarController>/5
         [HttpGet("{id}/current")]
-        public async Task<IActionResult> GetCurrentStatus(string id)
+        public Task<IActionResult> GetCurrentStatus(string id)
         {
-            var vehicle = await _vehicleUsecase.GetVehicle(id);
-            var currentStatus = await _vehicleUsecase.GetStatus(id);
-            var result = VehicleDTO.FromVehicle(vehicle, currentStatus);
-            return Ok(new { result });
+            //var vehicle = await _vehicleUsecase.GetVehicle(id);
+            //var currentStatus = await _vehicleUsecase.GetStatus(id);
+            //var result = VehicleOutputModel.FromVehicle(vehicle, currentStatus);
+            //return Ok(new { result });
+            throw new NotImplementedException();
         }
 
         // GET api/<CarController>/5
@@ -61,16 +61,15 @@ namespace WebApi.Controllers
 
         // POST api/<CarController>
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] string name)
+        public async Task<IActionResult> Register([FromBody] VehicleRegisterInputModel vehicle)
         {
-            Console.WriteLine(name);
-            var result = await _vehicleUsecase.Register(name);
+            var result = await _vehicleUsecase.Register(vehicle.Name);
             return Ok(new { result });
         }
 
-        // PUT api/<CarController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromBody] Status status)
+        // PUT api/<CarController>
+        [HttpPut("status")]
+        public async Task<IActionResult> UpdateStatus([FromBody] StatusInputModel status)
         {
             var result = await _vehicleUsecase.Update(status);
             return Ok(new { result });

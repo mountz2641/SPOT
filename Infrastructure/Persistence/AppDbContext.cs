@@ -31,6 +31,7 @@ namespace Infrastructure.Persistence
             var status = builder.Entity<Status>();
             status.HasKey(x => x.ID);
             status.Property(x => x.ID).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+            status.Property(x => x.VehicleID).HasColumnName("vehicleid").IsRequired();
             status.Property(x => x.Latitude).HasColumnName("latitude").IsRequired();
             status.Property(x => x.Longitude).HasColumnName("longitude").IsRequired();
             status.HasMany(x => x.Sensors).WithOne().HasForeignKey(y => y.StatusID);

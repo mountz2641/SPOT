@@ -1,17 +1,17 @@
-﻿using Shared.Interfaces;
+﻿using Application.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace Infrastructure.Services
 {
-    public class DateTimeService : IDatetimeService
+    public class DateTimeService : IDateTimeService
     {
         public DateTime FromISO (string s)
         {
-            _ = DateTime.TryParse(s, out DateTime dt);
+            DateTime.TryParse(s, out var dt);
             return dt;
         }
     }
