@@ -31,7 +31,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetVehicle(string id)
+        public async Task<IActionResult> GetVehicle(int id)
         {
             var vehicle = await _vehicleUsecase.GetVehicle(id);
             
@@ -51,7 +51,7 @@ namespace WebApi.Controllers
 
         // GET api/<CarController>/5
         [HttpGet("{id}/range")]
-        public async Task<IActionResult> GetRangeStatus(string id, [FromQuery] string qFrom, [FromQuery] string qTo)
+        public async Task<IActionResult> GetRangeStatus(int id, [FromQuery] string qFrom, [FromQuery] string qTo)
         {
             var from = _datetimeService.FromISO(qFrom);
             var to = _datetimeService.FromISO(qTo);

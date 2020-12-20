@@ -12,5 +12,6 @@ namespace Application.Interfaces.DAO
     {
         Task<int> CreateAsync(Vehicle vehicle);
         Task<Vehicle> FindByCode(string code);
+        Task<Vehicle> FindByID(int id);
     }
 }

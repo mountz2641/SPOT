@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 using Application.Interfaces.DAO;
 using Domain.Entities;
-using DM = Domain.Entities; // domain model
-using PM = Infrastructure.Persistence.Models; // persistence model
+using DM = Domain.Entities;
+using PM = Infrastructure.Persistence.Models;
 
 namespace Infrastructure.Persistence.DAO
 {
@@ -30,6 +30,18 @@ namespace Infrastructure.Persistence.DAO
         public async Task<Vehicle> FindByCode(string code)
         {
             var result = await _context.Vehicles.Where(x => x.Code == code).SingleOrDefaultAsync();
+            var vehicle = new Vehicle
+            {
+                ID = result.ID,
+                Code = result.Code,
+                Name = result.Name
+            };
+            return vehicle;
+        }
+
+        public async Task<Vehicle> FindByID(int id)
+        {
+            var result = await _context.Vehicles.Where(x => x.ID == id).SingleOrDefaultAsync();
             var vehicle = new Vehicle
             {
                 ID = result.ID,

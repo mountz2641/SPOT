@@ -11,18 +11,32 @@ namespace Application.DTO
     {
         public string Name { get; set; }
     }
-    public class VehicleOutputModel
+    public class VehicleWithStatusOutputModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
         public StatusOutputModel Status { get; set; }
 
-        public static VehicleOutputModel FromVehicle(Vehicle vehicle, Status status)
+        public static VehicleWithStatusOutputModel FromVehicle(Vehicle vehicle, Status status)
+        {
+            return new VehicleWithStatusOutputModel
+            {
+                Name = vehicle.Name,
+                Status = StatusOutputModel.FromStatus(status)
+            };
+        }
+    }
+
+    public class VehicleOutputModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+
+        public static VehicleOutputModel FromVehicle(Vehicle vehicle)
         {
             return new VehicleOutputModel
             {
                 Name = vehicle.Name,
-                Status = StatusOutputModel.FromStatus(status)
             };
         }
     }

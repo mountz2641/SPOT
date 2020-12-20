@@ -24,19 +24,25 @@ namespace Application.Usecases
             _statusDao = statusDao;
         }
 
-        public Task<List<StatusOutputModel>> GetStatus(string vehicleId, DateTime from, DateTime to)
+        public async Task<List<StatusOutputModel>> GetStatus(int vehicleId, DateTime from, DateTime to)
         {
-            throw new NotImplementedException();
+            var newFrom = new DateTimeOffset(from).ToUnixTimeMilliseconds();
+            var newTo = new DateTimeOffset(to).ToUnixTimeMilliseconds();
+            var result = await _statusDao.GetRange(vehicleId, newFrom, newTo);
+            return result.ConvertAll(r => StatusOutputModel.FromStatus(r));
         }
 
-        public Task<StatusOutputModel> GetStatus(string vehicleId)
+        public async Task<StatusOutputModel> GetStatus(int vehicleId)
         {
-            throw new NotImplementedException();
+            var result = await _statusDao.GetLatest(vehicleId);
+            return StatusOutputModel.FromStatus(result);
         }
 
-        public Task<VehicleOutputModel> GetVehicle(string vehicleId)
+        public async Task<VehicleWithStatusOutputModel> GetVehicle(int vehicleId)
         {
-            throw new NotImplementedException();
+            var result = await _vehicleDao.FindByID(vehicleId);
+            var status = await _statusDao.GetLatest(vehicleId);
+            return VehicleWithStatusOutputModel.FromVehicle(result, status);
         }
 
         public async Task<string> Register(string name)
