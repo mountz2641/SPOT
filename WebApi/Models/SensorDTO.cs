@@ -14,7 +14,7 @@ namespace WebApi.Models
 
         public static SensorDTO FromSensor(Sensor sensor)
         {
-            return new SensorDTO()
+            return new SensorDTO
             {
                 Name = sensor.Name,
                 Value = sensor.Value

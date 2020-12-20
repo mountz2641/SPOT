@@ -36,7 +36,7 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("MySQLConnection");
-            services.AddDbContextPool<DataContext>(
+            services.AddDbContextPool<AppDbContext>(
                 dbContextOption => dbContextOption.UseMySql(
                     connectionString,
                     mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
@@ -56,6 +56,12 @@ namespace Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+                dbContext.Database.EnsureCreated();
             }
 
             app.UseHttpsRedirection();

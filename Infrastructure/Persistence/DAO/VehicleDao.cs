@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Application.Interfaces.DAO;
-using Domain.Entities;
-using Infrastructure.Persistence.Models;
+using DM = Domain.Entities; // domain model
+using PM = Infrastructure.Persistence.Models; // persistence model
 
 namespace Infrastructure.Persistence.DAO
 {
     public class VehicleDao : IVehicleDao
     {
-        private readonly DataContext _context;
-        public VehicleDao(DataContext context)
+        private readonly AppDbContext _context;
+        public VehicleDao(AppDbContext context)
         {
             _context = context;
         }
-        public async Task<string> Register(Vehicle vehicle, string code)
+        public async Task<string> Register(DM.Vehicle vehicle, string code)
         {
-            var result = await _context.Vehicles.AddAsync(new VehicleModel { Name = vehicle.Name, Code = code });
+            var result = await _context.Vehicles.AddAsync(new PM.Vehicle { Name = vehicle.Name, Code = code });
             await _context.SaveChangesAsync();
             return result.Entity.Code;
         }

@@ -15,7 +15,7 @@ namespace WebApi.Models
 
         public static StatusDTO FromStatus(Status status)
         {
-            return new StatusDTO()
+            return new StatusDTO
             {
                 Latitude = status.Latitude,
                 Longitude = status.Longitude,

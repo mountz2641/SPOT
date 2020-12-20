@@ -14,7 +14,7 @@ namespace WebApi.Models
 
         public static VehicleDTO FromVehicle(Vehicle vehicle, Status status)
         {
-            return new VehicleDTO()
+            return new VehicleDTO
             {
                 Name = vehicle.Name,
                 Status = StatusDTO.FromStatus(status)

@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence.Models
 {
-    public class VehicleModel
+    public class Vehicle
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
     }
