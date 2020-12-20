@@ -10,6 +10,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+
+using Application.Interfaces.Usecases;
+using Application.Interfaces.DAO;
+using Application.Usecases;
+using Infrastructure.Persistence;
+using Infrastructure.Persistence.DAO;
+using Shared.Interfaces;
+using Shared;
 
 namespace Web
 {
@@ -25,6 +35,17 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Configuration.GetConnectionString("MySQLConnection");
+            services.AddDbContextPool<DataContext>(
+                dbContextOption => dbContextOption.UseMySql(
+                    connectionString,
+                    mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
+                )
+            );
+
+            services.AddScoped<IVehicleUsecase, VehicleUsecase>();
+            services.AddScoped<IVehicleDao, VehicleDao>();
+            services.AddSingleton<IDatetimeService, DateTimeService>();
 
             services.AddControllers();
         }

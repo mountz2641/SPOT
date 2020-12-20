@@ -16,7 +16,6 @@ namespace WebApi.Models
         {
             return new VehicleDTO()
             {
-                Id = vehicle.Id,
                 Name = vehicle.Name,
                 Status = StatusDTO.FromStatus(status)
             };

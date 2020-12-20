@@ -1,11 +1,11 @@
-﻿using Application.Interfaces;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Application.Interfaces;
+using Domain.Entities;
+using Application.Interfaces.Usecases;
 using WebApi.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -18,6 +18,12 @@ namespace WebApi.Controllers
     {
         private readonly IVehicleUsecase _vehicleUsecase;
         private readonly IDatetimeService _datetimeService;
+
+        public VehicleController(IVehicleUsecase vehicleUsecase, IDatetimeService datetimeService)
+        {
+            _vehicleUsecase = vehicleUsecase;
+            _datetimeService = datetimeService;
+        }
         // GET: api/<CarController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -40,7 +46,7 @@ namespace WebApi.Controllers
             var vehicle = await _vehicleUsecase.GetVehicle(id);
             var currentStatus = await _vehicleUsecase.GetStatus(id);
             var result = VehicleDTO.FromVehicle(vehicle, currentStatus);
-            return Ok(new { id });
+            return Ok(new { result });
         }
 
         // GET api/<CarController>/5
@@ -57,7 +63,8 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] string name)
         {
-            var result = await _vehicleUsecase.Register();
+            Console.WriteLine(name);
+            var result = await _vehicleUsecase.Register(name);
             return Ok(new { result });
         }
 
