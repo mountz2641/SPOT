@@ -1,5 +1,4 @@
-﻿using Application.Interfaces.DAO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,13 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 using DM = Domain.Entities;
 using PM = Infrastructure.Persistence.Models;
+using Application.Interfaces.Repository;
 
-namespace Infrastructure.Persistence.DAO
+namespace Infrastructure.Persistence.Repository
 {
-    public class StatusDao : IStatusDao
+    public class StatusRepository : IStatusRepository
     {
         private readonly AppDbContext _context;
-        public StatusDao(AppDbContext context)
+        public StatusRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -44,7 +44,7 @@ namespace Infrastructure.Persistence.DAO
                 Time = result.Time,
                 Latitude = result.Latitude,
                 Longitude = result.Longitude,
-                Sensors = result.Sensors.ConvertAll(s => new DM.Sensor { ID = s.ID, Name = s.Name, Value = s.Value})
+                Sensors = result.Sensors.ConvertAll(s => new DM.Sensor { ID = s.ID, Name = s.Name, Value = s.Value })
             };
             return status;
         }

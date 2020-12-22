@@ -5,24 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-
-using Application.Interfaces.DAO;
 using Domain.Entities;
 using DM = Domain.Entities;
 using PM = Infrastructure.Persistence.Models;
+using Application.Interfaces.Repository;
 
-namespace Infrastructure.Persistence.DAO
+namespace Infrastructure.Persistence.Repository
 {
-    public class VehicleDao : IVehicleDao
+    public class VehicleRepository : IVehicleRepository
     {
         private readonly AppDbContext _context;
-        public VehicleDao(AppDbContext context)
+        public VehicleRepository(AppDbContext context)
         {
             _context = context;
         }
-        public async Task<int> CreateAsync(DM.Vehicle vehicle)
+        public async Task<int> CreateAsync(Vehicle vehicle)
         {
-            var result = await _context.Vehicles.AddAsync(new PM.Vehicle { Name = vehicle.Name, Code = vehicle.Code });
+            var newVehicle = new PM.Vehicle { Name = vehicle.Name, Code = vehicle.Code };
+            var result = await _context.Vehicles.AddAsync(newVehicle);
             await _context.SaveChangesAsync();
             return result.Entity.ID;
         }
@@ -49,6 +49,20 @@ namespace Infrastructure.Persistence.DAO
                 Name = result.Name
             };
             return vehicle;
+        }
+
+        public async Task<List<Vehicle>> GetVehicles(int offset, int limit)
+        {
+            var result = await _context.Vehicles.Skip(offset).Take(limit).ToListAsync();
+            var vehicles = result.ConvertAll(x =>
+                new Vehicle
+                {
+                    ID = x.ID,
+                    Code = x.Code,
+                    Name = x.Name
+                }
+            );
+            return vehicles;
         }
     }
 }

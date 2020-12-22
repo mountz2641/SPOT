@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Status> Status { get; set; }
@@ -19,14 +20,15 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<Vehicle>();
 
-            var sensor = builder.Entity<Sensor>();
-            sensor.HasKey(x => x.ID);
-            sensor.Property(x => x.ID).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
-            sensor.Property(x => x.Name).HasColumnName("name").IsRequired();
-            sensor.Property(x => x.Value).HasColumnName("value").IsRequired();
-            sensor.ToTable("Sensors");
+            var vehicle = builder.Entity<Vehicle>();
+            vehicle.HasKey(x => x.ID);
+            vehicle.Property(x => x.ID).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+            vehicle.Property(x => x.Name).HasColumnName("name").IsRequired();
+            vehicle.Property(x => x.Code).HasColumnName("code").IsRequired();
+            vehicle.HasIndex(x => x.Name).IsUnique();
+            vehicle.HasIndex(x => x.Code).IsUnique();
+            vehicle.ToTable("Vehicles");
 
             var status = builder.Entity<Status>();
             status.HasKey(x => x.ID);
@@ -37,14 +39,13 @@ namespace Infrastructure.Persistence
             status.HasMany(x => x.Sensors).WithOne().HasForeignKey(y => y.StatusID);
             status.ToTable("Status");
 
-            var vehicle = builder.Entity<Vehicle>();
-            vehicle.HasKey(x => x.ID);
-            vehicle.Property(x => x.ID).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
-            vehicle.Property(x => x.Name).HasColumnName("name").IsRequired();
-            vehicle.Property(x => x.Code).HasColumnName("code").IsRequired();
-            vehicle.HasIndex(x => x.Name).IsUnique();
-            vehicle.HasIndex(x => x.Code).IsUnique();
-            vehicle.ToTable("Vehicles");
+            var sensor = builder.Entity<Sensor>();
+            sensor.HasKey(x => x.ID);
+            sensor.Property(x => x.ID).HasColumnName("id").IsRequired().ValueGeneratedOnAdd();
+            sensor.Property(x => x.Name).HasColumnName("name").IsRequired();
+            sensor.Property(x => x.Value).HasColumnName("value").IsRequired();
+            sensor.ToTable("Sensors");
+
         }
     }
 }
