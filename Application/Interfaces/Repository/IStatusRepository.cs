@@ -1,13 +1,10 @@
 ﻿using Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.DAO
+namespace Application.Interfaces.Repository
 {
-    public interface IStatusDao
+    public interface IStatusRepository
     {
         Task<int> CreateAsync(int vehicleId, Status status);
         Task<Status> GetLatest(int vehicleId);

@@ -13,7 +13,6 @@ namespace Application.DTO
     }
     public class VehicleWithStatusOutputModel
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public StatusOutputModel Status { get; set; }
 
@@ -29,7 +28,6 @@ namespace Application.DTO
 
     public class VehicleOutputModel
     {
-        public string Id { get; set; }
         public string Name { get; set; }
 
         public static VehicleOutputModel FromVehicle(Vehicle vehicle)

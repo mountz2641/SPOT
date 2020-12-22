@@ -10,17 +10,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
+
 using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 using Application.Interfaces.Usecases;
-using Application.Interfaces.DAO;
 using Application.Interfaces.Services;
 using Application.Usecases;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.DAO;
 using Infrastructure.Services;
-
+using Infrastructure.Persistence.Models;
+using Microsoft.AspNetCore.Identity;
+using Application.Interfaces.Repository;
+using Infrastructure.Persistence.Repository;
 
 namespace Web
 {
@@ -38,24 +42,58 @@ namespace Web
         {
             string connectionString = Configuration.GetConnectionString("MySQLConnection");
             services.AddDbContextPool<AppDbContext>(
-                dbContextOption => dbContextOption.UseMySql(
-                    connectionString,
-                    mySqlOptions => mySqlOptions.CharSetBehavior(CharSetBehavior.NeverAppend)
-                )
+                dbContextOption => dbContextOption.UseMySql(connectionString)
             );
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 8;
+
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    return Task.CompletedTask;
+                };
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+            });
 
             services.AddScoped<IVehicleUsecase, VehicleUsecase>();
-            services.AddScoped<IVehicleDao, VehicleDao>();
-            services.AddScoped<IStatusDao, StatusDao>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IStatusRepository, StatusRepository>();
+            services.AddScoped<IUserUsecase, UserUsecase>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<IVehicleCodeGenerator, VehicleCodeGenerator>();
             services.AddSingleton<ISecureRandomizer, RngSecureRandomizer>();
+
+            services.AddTransient<Initializer>();
 
             services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Initializer initializer)
         {
             if (env.IsDevelopment())
             {
@@ -68,10 +106,13 @@ namespace Web
                 dbContext.Database.EnsureCreated();
             }
 
+            initializer.Initialize();
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -80,4 +121,6 @@ namespace Web
             });
         }
     }
+
+
 }

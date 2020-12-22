@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Application.Interfaces.Usecases;
 using Application.Interfaces.Services;
 using Application.DTO;
+using Microsoft.AspNetCore.Authorization;
+using Shared;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,6 +15,7 @@ namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleUsecase _vehicleUsecase;
@@ -23,7 +26,7 @@ namespace WebApi.Controllers
             _vehicleUsecase = vehicleUsecase;
             _datetimeService = datetimeService;
         }
-        // GET: api/<CarController>
+        
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -40,13 +43,11 @@ namespace WebApi.Controllers
 
         // GET api/<CarController>/5
         [HttpGet("{id}/current")]
-        public Task<IActionResult> GetCurrentStatus(string id)
+        public async Task<IActionResult> GetCurrentStatus(int id)
         {
-            //var vehicle = await _vehicleUsecase.GetVehicle(id);
-            //var currentStatus = await _vehicleUsecase.GetStatus(id);
-            //var result = VehicleOutputModel.FromVehicle(vehicle, currentStatus);
-            //return Ok(new { result });
-            throw new NotImplementedException();
+            var result = await _vehicleUsecase.GetVehicle(id);
+            return Ok(new { result });
+            
         }
 
         // GET api/<CarController>/5
@@ -61,6 +62,7 @@ namespace WebApi.Controllers
 
         // POST api/<CarController>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] VehicleRegisterInputModel vehicle)
         {
             var result = await _vehicleUsecase.Register(vehicle.Name);
@@ -69,6 +71,7 @@ namespace WebApi.Controllers
 
         // PUT api/<CarController>
         [HttpPut("status")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateStatus([FromBody] StatusInputModel status)
         {
             var result = await _vehicleUsecase.Update(status);

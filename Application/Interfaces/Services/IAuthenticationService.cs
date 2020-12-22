@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.Services
 {
-    public interface IDateTimeService
+    public interface IAuthenticationService
     {
-        public DateTime FromISO(string iso);
-        public DateTime FromUnixMilliSecond(long ms);
+        Task<bool> Login(string userName, string password);
+        Task Logout();
     }
 }

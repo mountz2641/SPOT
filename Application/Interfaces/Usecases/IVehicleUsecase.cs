@@ -12,6 +12,7 @@ namespace Application.Interfaces.Usecases
     {
         Task<string> Register(string name);
         Task<bool> Update(StatusInputModel status);
+        Task<List<VehicleOutputModel>> GetVehicles(int offset, int limit);
         Task<VehicleWithStatusOutputModel> GetVehicle(int vehicleId);
         Task<List<StatusOutputModel>> GetStatus(int vehicleId, DateTime from, DateTime to);
         Task<StatusOutputModel> GetStatus(int vehicleId);
