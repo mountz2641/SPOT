@@ -26,22 +26,22 @@ namespace WebApi.Controllers
             _vehicleUsecase = vehicleUsecase;
             _datetimeService = datetimeService;
         }
-        
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get([FromQuery] int offset, [FromQuery] int limit)
         {
-            return new string[] { "value1", "value2" };
+            var vehicles = await _vehicleUsecase.GetVehicles(offset, limit);
+            return Ok(new { vehicles });
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
             var vehicle = await _vehicleUsecase.GetVehicle(id);
-            
             return Ok(new { vehicle });
         }
 
-        // GET api/<CarController>/5
+        
         [HttpGet("{id}/current")]
         public async Task<IActionResult> GetCurrentStatus(int id)
         {
@@ -50,17 +50,17 @@ namespace WebApi.Controllers
             
         }
 
-        // GET api/<CarController>/5
+        
         [HttpGet("{id}/range")]
-        public async Task<IActionResult> GetRangeStatus(int id, [FromQuery] string qFrom, [FromQuery] string qTo)
+        public async Task<IActionResult> GetRangeStatus(int id, [FromQuery] long from, [FromQuery] long to)
         {
-            var from = _datetimeService.FromISO(qFrom);
-            var to = _datetimeService.FromISO(qTo);
-            var result = await _vehicleUsecase.GetStatus(id, from, to);
+            var fromTime = _datetimeService.FromUnixMilliSecond(from);
+            var toTime = _datetimeService.FromUnixMilliSecond(to);
+            var result = await _vehicleUsecase.GetStatus(id, fromTime, toTime);
             return Ok(new { result });
         }
 
-        // POST api/<CarController>
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] VehicleRegisterInputModel vehicle)
@@ -69,7 +69,7 @@ namespace WebApi.Controllers
             return Ok(new { result });
         }
 
-        // PUT api/<CarController>
+        
         [HttpPut("status")]
         [AllowAnonymous]
         public async Task<IActionResult> UpdateStatus([FromBody] StatusInputModel status)
