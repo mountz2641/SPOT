@@ -71,9 +71,64 @@ namespace Infrastructure.Persistence
                     _appDbContext.Vehicles.Add(vehicle);
                 }
             }
-            
-            //Seed Status
 
+            //Seed Status
+            var seedStatus = new Status[] {
+                new Status { VehicleID = 1, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 1, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 1, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 2, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 2, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 2, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 3, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 3, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+                new Status { VehicleID = 4, Time = 0,
+                    Latitude = 13.0, Longitude = 100.0,
+                    Sensors = new List<Sensor> { 
+                        new Sensor { Name = "", Value = "" } 
+                    } 
+                },
+            };
             _appDbContext.SaveChanges();
         }
     }
