@@ -37,7 +37,7 @@ namespace Application.DTO
             {
                 Latitude = status.Latitude,
                 Longitude = status.Longitude,
-                Sensors = (List<SensorOutputModel>)status.Sensors.Select(s => SensorOutputModel.FromSensor(s))
+                Sensors = status.Sensors.ConvertAll(s => SensorOutputModel.FromSensor(s))
             };
         }
     }

@@ -74,61 +74,68 @@ namespace Infrastructure.Persistence
 
             //Seed Status
             var seedStatus = new Status[] {
-                new Status { VehicleID = 1, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 1, Time = 160871230000,
+                    Latitude = 13.846917, Longitude = 100.562603,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "50" } 
                     } 
                 },
-                new Status { VehicleID = 1, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 1, Time = 160871260000,
+                    Latitude = 13.845063, Longitude = 100.566090,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "50" } 
                     } 
                 },
-                new Status { VehicleID = 1, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 1, Time = 160871290000,
+                    Latitude = 13.843330, Longitude = 100.569099,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "50" } 
                     } 
                 },
-                new Status { VehicleID = 2, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 2, Time = 160871230000,
+                    Latitude = 13.838507, Longitude =  100.574850,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "90" } 
                     } 
                 },
-                new Status { VehicleID = 2, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 2, Time = 160871260000,
+                    Latitude = 13.836757, Longitude = 100.573981,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "89" } 
                     } 
                 },
-                new Status { VehicleID = 2, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 2, Time = 160871290000,
+                    Latitude = 13.834538, Longitude = 100.572640,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "89" } 
                     } 
                 },
-                new Status { VehicleID = 3, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 3, Time = 160871230000,
+                    Latitude = 13.831673, Longitude = 100.571031,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "66" } 
                     } 
                 },
-                new Status { VehicleID = 3, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 3, Time = 160871260000,
+                    Latitude = 13.830004, Longitude = 100.570023,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "65" } 
                     } 
                 },
-                new Status { VehicleID = 4, Time = 0,
-                    Latitude = 13.0, Longitude = 100.0,
+                new Status { VehicleID = 4, Time = 160871230000,
+                    Latitude = 13.828118, Longitude = 100.568918,
                     Sensors = new List<Sensor> { 
-                        new Sensor { Name = "", Value = "" } 
+                        new Sensor { Name = "fuel", Value = "42" } 
                     } 
                 },
             };
+            foreach (var status in seedStatus)
+            {
+                if (!_appDbContext.Status.Any(s => s.VehicleID == status.VehicleID && s.Time == status.Time))
+                {
+                    _appDbContext.Status.Add(status);
+                }
+            }
             _appDbContext.SaveChanges();
         }
     }

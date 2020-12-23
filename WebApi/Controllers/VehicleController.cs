@@ -28,7 +28,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] int offset, [FromQuery] int limit)
+        public async Task<IActionResult> Get([FromQuery] int offset = 0, [FromQuery] int limit = 20)
         {
             var vehicles = await _vehicleUsecase.GetVehicles(offset, limit);
             return Ok(new { vehicles });

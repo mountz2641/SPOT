@@ -37,7 +37,8 @@ namespace Infrastructure.Persistence.Repository
         public async Task<DM.Status> GetLatest(int vehicleId)
         {
             var result = await _context.Status.Where(x => x.VehicleID == vehicleId)
-                            .OrderByDescending(x => x.Time).SingleOrDefaultAsync();
+                            .Include(x => x.Sensors).OrderByDescending(x => x.Time).FirstOrDefaultAsync();
+            Console.WriteLine(result.Sensors.Count());
             var status = new DM.Status
             {
                 ID = result.ID,
@@ -52,7 +53,7 @@ namespace Infrastructure.Persistence.Repository
         public async Task<List<DM.Status>> GetRange(int vehicleId, long from, long to)
         {
             var result = await _context.Status.Where(x => x.VehicleID == vehicleId && x.Time >= from && x.Time <= to)
-                            .OrderBy(x => x.Time).ToListAsync();
+                            .Include(x => x.Sensors).OrderBy(x => x.Time).ToListAsync();
             var status = result.ConvertAll(s => new DM.Status
             {
                 ID = s.ID,
