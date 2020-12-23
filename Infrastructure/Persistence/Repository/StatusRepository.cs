@@ -38,7 +38,6 @@ namespace Infrastructure.Persistence.Repository
         {
             var result = await _context.Status.Where(x => x.VehicleID == vehicleId)
                             .Include(x => x.Sensors).OrderByDescending(x => x.Time).FirstOrDefaultAsync();
-            Console.WriteLine(result.Sensors.Count());
             var status = new DM.Status
             {
                 ID = result.ID,

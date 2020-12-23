@@ -9,6 +9,7 @@ namespace Application.DTO
 {
     public class StatusInputModel
     {
+        public long Time { get; set; }
         public string Code { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
@@ -18,6 +19,7 @@ namespace Application.DTO
         {
             return new Status
             {
+                Time = status.Time,
                 Latitude = status.Latitude,
                 Longitude = status.Longitude,
                 Sensors = status.Sensors.ConvertAll(s => SensorInputModel.ToSensor(s))
@@ -27,6 +29,7 @@ namespace Application.DTO
 
     public class StatusOutputModel
     {
+        public long Time { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public List<SensorOutputModel> Sensors { get; set; }
@@ -35,6 +38,7 @@ namespace Application.DTO
         {
             return new StatusOutputModel
             {
+                Time = status.Time,
                 Latitude = status.Latitude,
                 Longitude = status.Longitude,
                 Sensors = status.Sensors.ConvertAll(s => SensorOutputModel.FromSensor(s))

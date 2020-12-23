@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 
 using Microsoft.EntityFrameworkCore;
@@ -86,6 +87,7 @@ namespace Web
             services.AddSingleton<IDateTimeService, DateTimeService>();
             services.AddSingleton<IVehicleCodeGenerator, VehicleCodeGenerator>();
             services.AddSingleton<ISecureRandomizer, RngSecureRandomizer>();
+            services.AddScoped<IDbHealthChecker, DbHealthChecker>();
 
             services.AddTransient<Initializer>();
 
@@ -102,6 +104,8 @@ namespace Web
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
+                WaitForDb(serviceScope.ServiceProvider);
+                
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
                 dbContext.Database.EnsureCreated();
             }
@@ -119,6 +123,26 @@ namespace Web
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void WaitForDb(IServiceProvider service)
+        {
+            var checker = service.GetService<IDbHealthChecker>();
+            var maxAttemps = 10;
+            var delay = 5000;
+
+            for (int i = 0; i < maxAttemps; i++)
+            {
+                Console.Write("Try Connecting DB {0}...", i);
+                if (checker.IsConnected())
+                {
+                    Console.WriteLine("DB Connected");
+                    return;
+                }
+                Console.WriteLine("Connection Failed");
+                Thread.Sleep(delay);
+            }
+            throw new Exception("Can't Access Database");
         }
     }
 

@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  db:
+    image: mysql:8.0.22
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: THIS_IS_SECRET
+    ports:
+      - 3306:3306
+  webapi:
+    image: ${DOCKER_REGISTRY-}webapi
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000

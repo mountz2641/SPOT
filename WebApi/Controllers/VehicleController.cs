@@ -47,7 +47,6 @@ namespace WebApi.Controllers
         {
             var result = await _vehicleUsecase.GetVehicle(id);
             return Ok(new { result });
-            
         }
 
         
