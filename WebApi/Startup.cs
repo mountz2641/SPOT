@@ -102,16 +102,6 @@ namespace Web
                 app.UseDeveloperExceptionPage();
             }
 
-            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                WaitForDb(serviceScope.ServiceProvider);
-                
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
-                dbContext.Database.EnsureCreated();
-            }
-
-            initializer.Initialize();
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -124,27 +114,5 @@ namespace Web
                 endpoints.MapControllers();
             });
         }
-
-        private static void WaitForDb(IServiceProvider service)
-        {
-            var checker = service.GetService<IDbHealthChecker>();
-            var maxAttemps = 10;
-            var delay = 5000;
-
-            for (int i = 0; i < maxAttemps; i++)
-            {
-                Console.Write("Try Connecting DB {0}...", i);
-                if (checker.IsConnected())
-                {
-                    Console.WriteLine("DB Connected");
-                    return;
-                }
-                Console.WriteLine("Connection Failed");
-                Thread.Sleep(delay);
-            }
-            throw new Exception("Can't Access Database");
-        }
     }
-
-
 }

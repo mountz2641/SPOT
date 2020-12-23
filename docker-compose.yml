@@ -6,6 +6,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: THIS_IS_SECRET
+      MYSQL_DATABASE: spot
     ports:
       - 3306:3306
   webapi:

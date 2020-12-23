@@ -18,7 +18,7 @@ namespace Infrastructure.Persistence
         {
             _appDbContext = appDbContext;
         }
-        public void Initialize()
+        public async Task Initialize()
         {
             // Seed Role
             Role[] roles = (Role[])Enum.GetValues(typeof(Role));
@@ -30,7 +30,7 @@ namespace Infrastructure.Persistence
 
                 if (!_appDbContext.Roles.Any(r => r.Name == role.GetRoleName()))
                 {
-                    roleStore.CreateAsync(new IdentityRole(role.GetRoleName())
+                    await roleStore.CreateAsync(new IdentityRole(role.GetRoleName())
                     {
                         NormalizedName = role.GetRoleName().ToUpper()
                     });
@@ -52,7 +52,7 @@ namespace Infrastructure.Persistence
 
                 var userStore = new UserStore<AppUser>(_appDbContext);
                 var result = userStore.CreateAsync(user);
-                userStore.AddToRoleAsync(user, Role.Admin.ToString().ToUpper());
+                await userStore.AddToRoleAsync(user, Role.Admin.ToString().ToUpper());
             }
 
             //Seed Vehicle
@@ -136,7 +136,7 @@ namespace Infrastructure.Persistence
                     _appDbContext.Status.Add(status);
                 }
             }
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
         }
     }
 }
