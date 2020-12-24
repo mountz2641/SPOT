@@ -51,7 +51,7 @@ namespace WebApi.Controllers
 
         
         [HttpGet("{id}/range")]
-        public async Task<IActionResult> GetRangeStatus(int id, [FromQuery] long from, [FromQuery] long to)
+        public async Task<IActionResult> GetRangeStatus(int id, [FromQuery] long from = 0, [FromQuery] long to = 0)
         {
             // use epoch time for "from" and "to" argument
 
